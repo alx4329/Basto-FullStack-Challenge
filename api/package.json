@@ -1,0 +1,24 @@
+{
+  "name": "basto-challenge",
+  "version": "1.0.0",
+  "description": "A full Stack challenge for Basto company",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon -L",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alexis Martinez",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "mongoose": "^6.3.6",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
+  }
+}

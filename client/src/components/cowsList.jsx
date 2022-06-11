@@ -13,16 +13,17 @@ const CowsList = ({list}) => {
   
     const columns = [
         {id:'idSenasa',label:'ID Senasa',minWidth:50},
-        {id: 'type', label: 'Tipo Animal', minWidth: 100 },
-        {id: 'weight', label: 'Peso[kg]', minWidth: 170 },
-        {id: 'paddockName', label: 'Nombre establecimiento', minWidth: 170 },
-        {id: 'deviceType', label: 'Tipo de dispositivo', minWidth: 170 },
-        {id: 'deviceNumber', label: 'Numero de dispositivo', minWidth: 170 },
+        {id: 'type', label: 'Tipo Animal', minWidth: 60 },
+        {id: 'weight', label:  'Peso[kg]', minWidth: 60 },
+        {id: 'paddockName', label: 'Nombre establecimiento', minWidth: 60 },
+        {id: 'deviceType', label: 'Tipo de dispositivo', minWidth: 60 },
+        {id: 'deviceNumber', label: 'Numero de dispositivo', minWidth: 60 },
         ];
         
         function createData(idSenasa, type, weight, paddockName, deviceType, deviceNumber) {
             const spanishType= type==='Steer'?'Novillo':type==='Bull'?'Toro':'Vaquillona';
-            return {idSenasa,type:spanishType,weight,paddockName,deviceType,deviceNumber };
+            const spanishDeviceType= deviceType==='Necklace'?'Collar':'Caravana';
+            return {idSenasa,type:spanishType,weight,paddockName,deviceType:spanishDeviceType,deviceNumber };
         }
         
         let rows = []
@@ -44,7 +45,7 @@ const CowsList = ({list}) => {
         };
     return(
         <>
-            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+            <Paper sx={{ width: '80%', overflow: 'hidden' }}>
                 <TableContainer >
                     <Table stickyHeader aria-label="sticky table">
                     <TableHead>

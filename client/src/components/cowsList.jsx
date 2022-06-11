@@ -7,29 +7,40 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-
-
+import Button from '@mui/material/Button';
+import EditCow from './editCow'
+import Swal from 'sweetalert2'
+import {deleteCow} from '../actions/actions'
 const CowsList = ({list}) => {
   
     const columns = [
-        {id:'idSenasa',label:'ID Senasa',minWidth:50},
+        {id:'id_senasa',label:'ID Senasa',minWidth:50},
         {id: 'type', label: 'Tipo Animal', minWidth: 60 },
         {id: 'weight', label:  'Peso[kg]', minWidth: 60 },
         {id: 'paddockName', label: 'Nombre establecimiento', minWidth: 60 },
         {id: 'deviceType', label: 'Tipo de dispositivo', minWidth: 60 },
         {id: 'deviceNumber', label: 'Numero de dispositivo', minWidth: 60 },
+        {id:'actions', label:'Acciones', minWidth:60}
         ];
         
-        function createData(idSenasa, type, weight, paddockName, deviceType, deviceNumber) {
+        function createData(idSenasa, type, weight, paddockName, deviceType, deviceNumber,actions) {
             const spanishType= type==='Steer'?'Novillo':type==='Bull'?'Toro':'Vaquillona';
             const spanishDeviceType= deviceType==='Necklace'?'Collar':'Caravana';
-            return {idSenasa,type:spanishType,weight,paddockName,deviceType:spanishDeviceType,deviceNumber };
+            return {id_senasa:idSenasa,type:spanishType,weight,paddockName,deviceType:spanishDeviceType,deviceNumber,actions };
         }
         
         let rows = []
         if (list){
             rows=list?.map(item=>{
-                return createData(item.id_senasa,item.type,item.weight,item.paddockName,item.deviceType, item.deviceNumber)
+                return createData(
+                    item.id_senasa,
+                    item.type,
+                    item.weight,
+                    item.paddockName,
+                    item.deviceType,
+                    item.deviceNumber,
+                    "actions"
+                    )
         })}
         
         const [page, setPage] = React.useState(0);
@@ -43,6 +54,56 @@ const CowsList = ({list}) => {
         setRowsPerPage(+event.target.value);
         setPage(0);
         };
+        const [open, setOpen] = React.useState(false);
+        const [editCow, setEditCow] = React.useState({});
+        const handleEdit = (cow) => {
+            setEditCow({
+                id_senasa:cow.id_senasa,
+                type:cow.type==='Novillo'?'Steer':cow.type==='Toro'?'Bull':cow.type==='Vaquillona'?'Heifer':'',
+                weight:cow.weight,
+                paddockName:cow.paddockName,
+                deviceType:cow.deviceType==='Collar'?'Necklace':cow.deviceType==='Caravana'?'Caravan':'',
+                deviceNumber:cow.deviceNumber
+            });
+            setOpen(true)
+        }
+        const handleModalChange = (e) => {          
+                setEditCow({
+                    ...editCow,
+                    [e.target.name]:e.target.value
+                })
+            
+        }
+        const handleDeleteCow = async (id) => {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+              }).then(async(result) => {
+                if (result.isConfirmed) {
+                    try{
+                        const deleted = await deleteCow(id)
+                        Swal.fire(
+                          'Deleted!',
+                          'Your file has been deleted.',
+                          'success'
+                        )
+                    }catch(e){
+                        Swal.fire(
+                          'Error!',
+                          'Algo salió mal',
+                          'error'
+                        )
+                    }
+                    
+                }
+              })
+        }
+        
     return(
         <>
             <Paper sx={{ width: '80%', overflow: 'hidden' }}>
@@ -73,7 +134,14 @@ const CowsList = ({list}) => {
                                     <TableCell key={column.id} align={column.align} size='small'>
                                     {column.format && typeof value === 'number'
                                         ? column.format(value)
-                                        : value}
+                                        : value==="actions"?(
+                                            <div className="icons-container">
+                                                <Button onClick={()=>handleEdit(row)} >Editar</Button>
+                                                
+                                                <Button onClick={()=>{handleDeleteCow(row.id_senasa)}} >Borrar</Button>
+
+                                            </div>
+                                            ):value}
                                     </TableCell>
                                 );
                                 })}
@@ -93,7 +161,9 @@ const CowsList = ({list}) => {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
         </Paper>
-        
+        {
+            open && <EditCow open={open} cow={editCow} setCow={handleModalChange} setOpen={setOpen} />
+        }
     </>
     )
 }

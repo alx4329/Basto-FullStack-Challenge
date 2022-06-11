@@ -17,7 +17,6 @@ import Stack from '@mui/material/Stack';
 import {isNumeric,isAlphaNumeric} from '../utils/validations';
 import { spanishTypes, deviceTypes } from '../utils/constants';
 import Swal from 'sweetalert2'
-import { useNavigate } from "react-router-dom";
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -40,12 +39,17 @@ const emptyState={
     title:'',
 }
 //COMPONENT
-const AddCow = (props)=>{
-    let navigate = useNavigate();
-    const [open, setOpen] = React.useState(false);
-    const [state, setState] = React.useState(emptyState)
-
-    if(Object.keys(props).length>0 ) setState(props)
+const EditCow = ({open, cow,setCow, setOpen})=>{
+    console.log(cow)
+    const [localValue, setLocalValue] = React.useState(cow);
+    
+    // React.useEffect(()=>{
+    //     if(cow){
+    //         setState(cow)
+    //         // console.log
+    //     }
+    // },[])
+    
     
     const [alertState, setAlertState] = React.useState({
         type:'',
@@ -55,14 +59,10 @@ const AddCow = (props)=>{
     
     
     const handleChange = (e)=>{
-        setState({
-            ...state,
-            [e.target.name]:e.target.value
-        })
+        setCow(e)
     }
-    const handleClose = ()=>{
-        setOpen(!open);
-        setState(emptyState)
+    const handleLocalChange = (e)=>{
+        setLocalValue({...localValue, [e.target.name]:e.target.value})
     }
     const handleOpen = () => {
         setOpen(!open);
@@ -75,7 +75,14 @@ const AddCow = (props)=>{
     }
     React.useEffect(()=>{
         if(alertState.type==="success"){
-            setState(emptyState)
+            // setState({
+            //     id_senasa: '',
+            //     type: '',
+            //     weight: '',
+            //     paddockName: '',
+            //     deviceType: '',
+            //     deviceNumber: ''
+            // })
         }
         if(alertState.type!==''){
             setTimeout(()=>{
@@ -85,14 +92,15 @@ const AddCow = (props)=>{
     },[alertState])
 
     const handleSubmit = async()=>{
-        if(state.id_senasa && state.type && state.weight && state.paddockName && state.deviceType && state.deviceNumber){
-            if(state.id_senasa?.length!==16) {
+        console.log("editando")
+        if(cow.id_senasa && cow.type && cow.weight && cow.paddockName && cow.deviceType && cow.deviceNumber){
+            if(cow.id_senasa?.length!==16) {
                 return setAlertState({
                     type:'warning',
                     message:'El id debe tener 16 caracteres'
                 })
             }
-            if(!isAlphaNumeric(state.id_senasa)) {
+            if(!isAlphaNumeric(cow.id_senasa)) {
                 return setAlertState({
                     type:'warning',
                     message:'El id debe ser alfanumerico'
@@ -101,12 +109,13 @@ const AddCow = (props)=>{
                 }
             
             try{
-                const newCow= await addCow({cow:state})
+                const newCow= await addCow({cow:cow, edit:true})
                 Swal.fire('Animal agregado con exito', '', 'success')
                 .then((value)=>{
                     value && window.location.reload();
                     })
                 
+
             }catch(e){
                 if(e.response.data.error) {
                     setAlertState({
@@ -136,7 +145,7 @@ const AddCow = (props)=>{
         <>
             {
                 <Dialog open={open} onClose={handleOpen}>
-                    <DialogTitle>Agregar Animal</DialogTitle>
+                    <DialogTitle>Editar Animal</DialogTitle>
                     <DialogContent>
                         <DialogContentText>Datos:</DialogContentText>
                         <TextField
@@ -148,17 +157,20 @@ const AddCow = (props)=>{
                             type="text"
                             fullWidth
                             variant="standard"
-                            value={state.id_senasa}
-                            onChange={(e) => {if(isAlphaNumeric(e.target.value)) handleChange(e)}}
-                            helperText={state.id_senasa.length !== 16 && 'El ID debe tener 16 caracteres alfanumericos'}
+                            value={localValue.id_senasa}
+                            onChange={(e) => {if(isAlphaNumeric(e.target.value)) handleLocalChange(e)}}
+                            onBlur={(e) => {if(isAlphaNumeric(e.target.value)) handleChange(e)}}
+                            helperText={cow.id_senasa.length !== 16 && 'El ID debe tener 16 caracteres alfanumericos'}
+                            disabled
                         />
                         <InputLabel id="demo-name-label">Tipo de animal</InputLabel>
                             <Select
                                 labelId="demo-name-label"
                                 id="demo-multiple-name"
-                                value={state.type}
+                                value={localValue.type}
                                 name="type"
-                                onChange={handleChange}
+                                onChange={handleLocalChange}
+                                onBlur={handleChange}
                                 input={<OutlinedInput label="Tipo de animal" fullWidth />}
                                 MenuProps={MenuProps}
                             >
@@ -180,8 +192,9 @@ const AddCow = (props)=>{
                             type="text"
                             fullWidth
                             variant="standard"
-                            value={state.weight}
-                            onChange={(e) =>{if(isNumeric(e.target.value)) handleChange(e)}}
+                            value={localValue.weight}
+                            onChange={(e) =>{if(isNumeric(e.target.value)) handleLocalChange(e)}}
+                            onBlur={(e) =>{if(isNumeric(e.target.value)) handleChange(e)}}
                             InputProps={{
                                         endAdornment: <InputAdornment position="end">kg</InputAdornment>,
                                         
@@ -197,16 +210,18 @@ const AddCow = (props)=>{
                             type="text"
                             fullWidth
                             variant="standard"
-                            value={state.paddockName}
-                            onChange={(e) => handleChange(e)}
+                            value={localValue.paddockName}
+                            onBlur={(e) => handleChange(e)}
+                            onChange={(e) => handleLocalChange(e)}
                         />
                          <InputLabel id="demo-name-label">Tipo dispositivo</InputLabel>
                             <Select
                                 labelId="demo-name-label"
                                 id="demo-multiple-name"
-                                value={state.deviceType}
+                                value={localValue.deviceType}
                                 name="deviceType"
-                                onChange={handleChange}
+                                onChange={handleLocalChange}
+                                onBlur={handleChange}
                                 input={<OutlinedInput label="Tipo de dispositivo" fullWidth />}
                                 MenuProps={MenuProps}
                             >
@@ -228,15 +243,16 @@ const AddCow = (props)=>{
                             type="text"
                             fullWidth
                             variant="standard"
-                            value={state.deviceNumber}
-                            onChange={(e) => {if(isNumeric(e.target.value)) handleChange(e)}}
+                            value={localValue.deviceNumber}
+                            onChange={(e) => {if(isNumeric(e.target.value)) handleLocalChange(e)}}
+                            onBlur={(e) => {if(isNumeric(e.target.value)) handleChange(e)}}
                         />
                                 
 
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose}>Cerrar</Button>
-                        <Button onClick={()=>handleSubmit()}>Crear</Button>
+                        <Button onClick={handleOpen}>Cerrar</Button>
+                        <Button onClick={()=>handleSubmit()}>Editar</Button>
                     </DialogActions>
                 </Dialog>
             }
@@ -247,11 +263,11 @@ const AddCow = (props)=>{
                         </Stack>
             }
             
-        <Button onClick={handleOpen}>Agregar animal</Button>
+        
 
         </>  
 
     )
 }
 
-export default AddCow;
+export default EditCow;

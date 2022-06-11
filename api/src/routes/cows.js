@@ -60,10 +60,10 @@ router.put('/', async(req,res)=>{
         res.status(500).send({error:e});
     }
 })
-router.delete('/',async (req,res)=>{
+router.delete('/:id',async (req,res)=>{
     try{
-        const {id_senasa} = req.body;
-        const deletedCow = await Cow.findOneAndDelete({id_senasa});
+        const {id} = req.params;
+        const deletedCow = await Cow.findOneAndDelete({id_senasa:id});
         if(deletedCow){
             res.send(deletedCow);
         }else{

@@ -8,18 +8,19 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Button from '@mui/material/Button';
+
 import EditCow from './editCow'
 import { handleDeleteCow } from '../utils/handlers';
 const CowsList = ({list}) => {
   
     const columns = [
-        {id:'id_senasa',label:'ID Senasa',minWidth:50},
-        {id: 'type', label: 'Tipo Animal', minWidth: 60 },
-        {id: 'weight', label:  'Peso[kg]', minWidth: 60 },
-        {id: 'paddockName', label: 'Nombre establecimiento', minWidth: 60 },
-        {id: 'deviceType', label: 'Tipo de dispositivo', minWidth: 60 },
-        {id: 'deviceNumber', label: 'Numero de dispositivo', minWidth: 60 },
-        {id:'actions', label:'Acciones', minWidth:60}
+        {id:'id_senasa',align:'center',label:'ID Senasa',minWidth:50},
+        {id: 'type',align:'center', label: 'Tipo Animal', minWidth: 60 },
+        {id: 'weight',align:'center', label:  'Peso[kg]', minWidth: 60 },
+        {id: 'paddockName',align:'center', label: 'Nombre establecimiento', minWidth: 60 },
+        {id: 'deviceType',align:'center', label: 'Tipo de dispositivo', minWidth: 60 },
+        {id: 'deviceNumber',align:'center', label: 'Numero de dispositivo', minWidth: 60 },
+        {id:'actions',align:'center', label:'Acciones', minWidth:150}
         ];
         
         function createData(idSenasa, type, weight, paddockName, deviceType, deviceNumber,actions) {
@@ -77,7 +78,7 @@ const CowsList = ({list}) => {
         
     return(
         <>
-            <Paper sx={{ width: '80%', overflow: 'hidden' }}>
+            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                 <TableContainer >
                     <Table stickyHeader aria-label="sticky table">
                     <TableHead>
@@ -86,7 +87,7 @@ const CowsList = ({list}) => {
                             <TableCell
                             key={column.id}
                             align={column.align}
-                            style={{ minWidth: column.minWidth }}
+                            style={{ minWidth: column.minWidth, 'font-weight': 'bolder' }}
                             >
                             {column.label}
                             </TableCell>
@@ -107,10 +108,10 @@ const CowsList = ({list}) => {
                                         ? column.format(value)
                                         : value==="actions"?(
                                             <div className="icons-container">
-                                                <Button onClick={()=>handleEdit(row)} >Editar</Button>
-                                                
-                                                <Button onClick={()=>{handleDeleteCow(row.id_senasa)}} >Borrar</Button>
-
+                                                <Button onClick={()=>handleEdit(row)} >
+                                                    <span class="material-symbols-outlined">edit</span></Button>                                                
+                                                <Button onClick={()=>{handleDeleteCow(row.id_senasa)}} >
+                                                    <span class="material-symbols-outlined">delete</span></Button>
                                             </div>
                                             ):value}
                                     </TableCell>
@@ -130,6 +131,7 @@ const CowsList = ({list}) => {
                     page={page}
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
+                    labelRowsPerPage="Filas por pagina"
                 />
         </Paper>
         {

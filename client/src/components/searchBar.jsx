@@ -3,16 +3,6 @@ import React from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  }));
-
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
@@ -38,18 +28,17 @@ const Search = styled('div')(({ theme }) => ({
       transition: theme.transitions.create('width'),
       width: '100%',
       [theme.breakpoints.up('md')]: {
-        width: '20ch',
+        width: '50ch',
       },
+      border: 'solid 1px #ccc',
+      borderRadius: '5px',
     },
   }));
 const SearchBar = ({search, setSearch}) => {
     return(
         <Search>
-            <SearchIconWrapper>
-            
-            </SearchIconWrapper>
             <StyledInputBase
-            placeholder="Search…"
+            placeholder="Buscar por id-senasa o nombre de establecimiento"
             inputProps={{ 'aria-label': 'search' }}
             value={search}
             onChange={(e)=>setSearch(e)}

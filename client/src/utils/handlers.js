@@ -18,7 +18,9 @@ export const handleDeleteCow = async (id) => {
                   'Eliminado!',
                   'El animal ha sido eliminado.',
                   'success'
-                )
+                ).then((value)=>{
+                  value && window.location.reload();
+                  })
             }catch(e){
                 Swal.fire(
                   'Error!',

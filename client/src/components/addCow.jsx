@@ -93,6 +93,12 @@ const AddCow = (props)=>{
                     message:'El id debe tener 16 caracteres'
                 })
             }
+            if(state.deviceNumber?.length!==8) {
+                return setAlertState({
+                    type:'warning',
+                    message:'El numero debe tener 8 caracteres'
+                })
+            }
             if(!isAlphaNumeric(state.id_senasa)) {
                 return setAlertState({
                     type:'warning',
@@ -227,7 +233,8 @@ const AddCow = (props)=>{
                             fullWidth
                             variant="standard"
                             value={state.deviceNumber}
-                            onChange={(e) => {if(isNumeric(e.target.value)) handleChange(e)}}
+                            onChange={(e) => {if(isAlphaNumeric(e.target.value)) handleChange(e)}}
+                            helperText={state.deviceNumber.length !== 8 && 'El N° debe tener 8 caracteres alfanumericos'}
                         />
                                 
 

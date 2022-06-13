@@ -5,9 +5,10 @@ import CowsList from '../components/cowsList'
 import AddCow from '../components/addCow'
 import SearchBar from '../components/searchBar'
 import './Home.css'
+import Typography from '@mui/material/Typography';
 const Home = () => {
     const [cows, setCows] = React.useState(null);
-    const [isLoading, setIsLoading] = React.useState(false);
+    const [isLoading, setIsLoading] = React.useState(true);
     const [search, setSearch] = React.useState("");
     
         const changeSearch = async (e) => {
@@ -31,7 +32,6 @@ const Home = () => {
             .then(res => {
                 setCows(res.data);
                 setIsLoading(false);
-                console.log(cows)
             })
             .catch(err => {
                 console.log(err);
@@ -47,14 +47,19 @@ const Home = () => {
         
         <div class="home-container">
             
-            <h4>Admin/Animals</h4>
-            <h1>Lista de animales</h1>
-            <SearchBar search={search} setSearch={changeSearch} />
-            <Button onClick={handleReset} >Reset</Button>
+            <Typography variant="h6" component="h2">Admin/Animals</Typography>
+            
+            <Typography variant="h4" component="h2">
+            Lista de animales
+            </Typography>;
+            <div class="search-container">
+                <Button size="small"  onClick={handleReset} >Refresh</Button>
+                <SearchBar search={search} setSearch={changeSearch} />
+            </div>
+            <AddCow />
             {
                 !isLoading && <CowsList search={search} setSearch={setSearch} list={cows} />
             }
-            <AddCow />
         </div>
     )
 }

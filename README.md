@@ -18,6 +18,10 @@ Descargar e instalar:
 >cd client
 > npm i
 ```
+```
+>cd ..
+> npm i
+```
 Antes de hacer correr la app, en la carpeta api, se debe crear el archivo .env con las contraseñas necesarias para el acceso a la base de datos. 
 
 ```

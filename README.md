@@ -13,7 +13,8 @@ Este proyecto se ha probado con éxito utilizando:
 ### Instalación
 Descargar e instalar:
 ```
-> git clone https://github.com/alx4329/Famous-Founder-Native.git
+> git clone https://github.com/alx4329/Basto-FullStack-Challenge.git
+
 >cd client
 > npm i
 ```

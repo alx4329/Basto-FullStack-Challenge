@@ -18,6 +18,7 @@ Descargar e instalar:
 >cd client
 > npm i
 ```
+Luego para instalar las dependencias del servidor:
 ```
 >cd ..
 > npm i

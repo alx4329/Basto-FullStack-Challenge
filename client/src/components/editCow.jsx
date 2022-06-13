@@ -16,7 +16,7 @@ import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import {isNumeric,isAlphaNumeric} from '../utils/validations';
 import { spanishTypes, deviceTypes } from '../utils/constants';
-import Swal from 'sweetalert2'
+import { createdAlert } from '../utils/swalActions';
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -42,15 +42,6 @@ const emptyState={
 const EditCow = ({open, cow,setCow, setOpen})=>{
     console.log(cow)
     const [localValue, setLocalValue] = React.useState(cow);
-    
-    // React.useEffect(()=>{
-    //     if(cow){
-    //         setState(cow)
-    //         // console.log
-    //     }
-    // },[])
-    
-    
     const [alertState, setAlertState] = React.useState({
         type:'',
         message:''
@@ -74,16 +65,6 @@ const EditCow = ({open, cow,setCow, setOpen})=>{
         })
     }
     React.useEffect(()=>{
-        if(alertState.type==="success"){
-            // setState({
-            //     id_senasa: '',
-            //     type: '',
-            //     weight: '',
-            //     paddockName: '',
-            //     deviceType: '',
-            //     deviceNumber: ''
-            // })
-        }
         if(alertState.type!==''){
             setTimeout(()=>{
             cleanAlert();
@@ -110,10 +91,7 @@ const EditCow = ({open, cow,setCow, setOpen})=>{
             
             try{
                 const newCow= await addCow({cow:cow, edit:true})
-                Swal.fire('Animal agregado con exito', '', 'success')
-                .then((value)=>{
-                    value && window.location.reload();
-                    })
+                createdAlert()
                 
 
             }catch(e){

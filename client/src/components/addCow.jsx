@@ -16,8 +16,9 @@ import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import {isNumeric,isAlphaNumeric} from '../utils/validations';
 import { spanishTypes, deviceTypes } from '../utils/constants';
-import Swal from 'sweetalert2'
 import { useNavigate } from "react-router-dom";
+import { createdAlert } from '../utils/swalActions';
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -102,10 +103,7 @@ const AddCow = (props)=>{
             
             try{
                 const newCow= await addCow({cow:state})
-                Swal.fire('Animal agregado con exito', '', 'success')
-                .then((value)=>{
-                    value && window.location.reload();
-                    })
+                createdAlert()
                 
             }catch(e){
                 if(e.response.data.error) {

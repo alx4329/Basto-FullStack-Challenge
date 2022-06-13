@@ -4,6 +4,7 @@ import { getCows } from '../actions/actions';
 import CowsList from '../components/cowsList'
 import AddCow from '../components/addCow'
 import SearchBar from '../components/searchBar'
+import './Home.css'
 const Home = () => {
     const [cows, setCows] = React.useState(null);
     const [isLoading, setIsLoading] = React.useState(false);
@@ -44,7 +45,8 @@ const Home = () => {
     }
     return (
         
-        <div>
+        <div class="home-container">
+            
             <h4>Admin/Animals</h4>
             <h1>Lista de animales</h1>
             <SearchBar search={search} setSearch={changeSearch} />

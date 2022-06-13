@@ -9,8 +9,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Button from '@mui/material/Button';
 import EditCow from './editCow'
-import Swal from 'sweetalert2'
-import {deleteCow} from '../actions/actions'
+import { handleDeleteCow } from '../utils/handlers';
 const CowsList = ({list}) => {
   
     const columns = [
@@ -74,35 +73,7 @@ const CowsList = ({list}) => {
                 })
             
         }
-        const handleDeleteCow = async (id) => {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-              }).then(async(result) => {
-                if (result.isConfirmed) {
-                    try{
-                        const deleted = await deleteCow(id)
-                        Swal.fire(
-                          'Deleted!',
-                          'Your file has been deleted.',
-                          'success'
-                        )
-                    }catch(e){
-                        Swal.fire(
-                          'Error!',
-                          'Algo salió mal',
-                          'error'
-                        )
-                    }
-                    
-                }
-              })
-        }
+        
         
     return(
         <>
